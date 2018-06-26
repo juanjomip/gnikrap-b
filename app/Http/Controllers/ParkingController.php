@@ -23,7 +23,28 @@ class ParkingController extends Controller
             )->get();          
 
         if(sizeof($parkings) > 0) {
-            $best = $parkings[0];
+            $best = null;
+            
+            foreach ($parkings as $parking) {              
+                $degtorad = 0.01745329;
+                $radtodeg = 57.29577951;
+                $dlong = ($lng - $parking->lng);
+                $dvalue = (sin($lat * $degtorad) * sin($parking->lat * $degtorad))
+                + (cos($lat * $degtorad) * cos($parking->lat * $degtorad)
+                * cos($dlong * $degtorad));
+                $dd = acos($dvalue) * $radtodeg;
+                $miles = ($dd * 69.16);
+                $metros = ($dd * 111.302) * 1000;
+                $parking->distance = ['u' => 'mts', 'value' => round($metros, 0), 'value_detail' => round($metros, 2)];
+
+                if($best != null) {
+                    if($metros < $best->distance['value_detail']) {
+                        $best = $parking;                        
+                    }
+                } else {
+                    $best = $parking;
+                }            
+            }
         } else {
             $best = null;
         }
