@@ -51,6 +51,12 @@ class ParkingController extends Controller
 
         return [
             'status' => 'OK',
+            'input' => [
+                'lat' => $lat,
+                'lng' => $lng,
+                'lat_i' => $lat_index,
+                'lng_i' => $lng_index
+            ]
             'closest' => $best,
             'parkings' => $parkings            
         ];        
