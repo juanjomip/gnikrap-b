@@ -68,7 +68,7 @@ class ParkingController extends Controller
                 'lat_index' => $lat_index,
                 'lng_index' => $lng_index
             ]);
-            return ['status' => 'OK'];
+            return ['status' => 'OK', 'message' => 'New parking has been added.'];
         } catch (Exception $e) {
             return ['status' => 'FAIL', 'err'=> $e->getMessage()];
         }
