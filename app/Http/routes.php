@@ -12,8 +12,7 @@
 */
 
 Route::get('/', function () {
-    return App::environment();
-    //return view('welcome');
+    return 'PickleeE RICK!!!';    
 });
 
 Route::controller('/parking', 'ParkingController');
