@@ -56,7 +56,7 @@ class ParkingController extends Controller
                 'lng' => $lng,
                 'lat_i' => $lat_index,
                 'lng_i' => $lng_index
-            ]
+            ],
             'closest' => $best,
             'parkings' => $parkings            
         ];        
