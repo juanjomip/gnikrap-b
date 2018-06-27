@@ -37,7 +37,7 @@ class ParkingController extends Controller
                 $metros = ($dd * 111.302) * 1000;
                 $parking->distance = ['u' => 'mts', 'value' => round($metros, 0), 'value_detail' => round($metros, 2)];
 
-                $parking->coords = ['lat' => (double) $parking->lat, 'lng' => (double) $parking->lng];
+                $parking->coords = ['latitude' => (double) $parking->lat, 'longitude' => (double) $parking->lng];
 
                 if($best != null) {
                     if($metros < $best->distance['value_detail']) {
