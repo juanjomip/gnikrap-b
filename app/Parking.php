@@ -129,6 +129,47 @@ class Parking extends Model
         }
     }  
 
+    public static function addByAlias($input) {
+        try {      
+            
+            $parking = new Parking();
+            $client = new \GuzzleHttp\Client();          
+            
+            $res = $client->get('https://maps.googleapis.com/maps/api/geocode/json?address='.$input['alias'].'&key=AIzaSyASmwYThmM1MqKZM2Gbwn8XxfNaUl_PI1k');
+
+            $jsonObj =  json_decode($res->getBody());
+
+
+            foreach ($jsonObj->results[0]->address_components as $component) {
+                if($component->types[0] === 'street_number') {
+                    $parking->street_number = $component->short_name;
+                } elseif($component->types[0] === 'route') {
+                    $parking->route = $component->short_name;
+                } elseif($component->types[0] === 'administrative_area_level_3') {
+                    $parking->administrative_area_level_3 = $component->short_name;
+                } elseif($component->types[0] === 'administrative_area_level_2') {
+                    $parking->administrative_area_level_2 = $component->short_name;
+                } elseif($component->types[0] === 'administrative_area_level_1') { 
+                    $parking->administrative_area_level_1 = $component->short_name;
+                }
+            }
+
+            $parking->lat = $jsonObj->results[0]->geometry->location->lat;
+            $parking->lng = $jsonObj->results[0]->geometry->location->lng;
+
+            $lat_index = floor($parking->lat/0.0017966);
+            $lng_index = floor($parking->lng/0.0017966);                       
+            $parking->alias = $input['alias'];
+            $parking->lat_index = $lat_index;
+            $parking->lng_index = $lng_index;
+            $parking->save();
+
+            return ['status' => 'OK', 'message' => 'New parking has been added.', 'data' => $parking];
+        } catch (Exception $e) {
+            return ['status' => 'FAIL', 'err'=> $e->getMessage()];
+        }
+    }  
+
     public static function findByPosition($input) {
         $parkings = Parking::where('lat_index', $input['lat_index'])
             ->where('lng_index', $input['lng_index'])  
