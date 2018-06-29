@@ -171,8 +171,9 @@ class Parking extends Model
     }  
 
     public static function findByPosition($input) {
-        $parkings = Parking::where('lat_index', $input['lat_index'])
-            ->where('lng_index', $input['lng_index'])  
+        $parkings = Parking::where('route', '!=', $input['route'])  
+            ->whereIn('lat_index', [$input['lat_index'], $input['lat_index'] + 1, $input['lat_index'] - 1])
+            ->whereIn('lng_index', [$input['lng_index'], $input['lng_index'] + 1, $input['lng_index'] - 1])  
             ->where('administrative_area_level_3', '!=', $input['administrative_area_level_3'])
             ->where('administrative_area_level_2', '!=', $input['administrative_area_level_2'])
             ->where('administrative_area_level_1', '!=', $input['administrative_area_level_1'])
@@ -251,7 +252,7 @@ class Parking extends Model
             $parking['lng'] = $input['lng'];
             $parking['lat_index'] = $lat_index;
             $parking['lng_index'] = $lng_index;
-            
+
             return $parking;
 
             
