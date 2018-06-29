@@ -219,4 +219,43 @@ class Parking extends Model
         //$parking->distance = ['u' => 'mts', 'value' => round($metros, 0), 'value_detail' => round($metros, 2)];
         return $metros;
     } 
+
+    public static function reverseGeoLocation($input) {
+        try {
+            $lat_index = floor($input['lat']/0.0017966);
+            $lng_index = floor($input['lng']/0.0017966);
+            
+            $parking = [];
+
+            $client = new \GuzzleHttp\Client();
+            $res = $client->get('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$input['lat'].','.$input['lng'].'&key=AIzaSyASmwYThmM1MqKZM2Gbwn8XxfNaUl_PI1k&result_type=street_address');
+
+            $jsonObj =  json_decode($res->getBody());
+            foreach ($jsonObj->results[0]->address_components as $component) {
+                if($component->types[0] === 'street_number') {
+                    $parking['street_number'] = $component->short_name;
+                } elseif($component->types[0] === 'route') {
+                    $parking['route'] = $component->short_name;
+                } elseif($component->types[0] === 'administrative_area_level_3') {
+                    $parking['administrative_area_level_3'] = $component->short_name;
+                } elseif($component->types[0] === 'administrative_area_level_2') {
+                    $parking['administrative_area_level_2'] = $component->short_name;
+                } elseif($component->types[0] === 'administrative_area_level_1') { 
+                    $parking['administrative_area_level_1'] = $component->short_name;
+                }
+            }
+
+            //return $jsonObj->results[0]->address_components;
+                       
+            $parking['lat'] = $input['lat'];
+            $parking['lng'] = $input['lng'];
+            $parking['lat_index'] = $lat_index;
+            $parking['lng_index'] = $lng_index;
+            return $parking;
+
+            
+        } catch (Exception $e) {
+            return $e->getMeesage().' - '.$e->getLine();
+        }
+    }  
 }

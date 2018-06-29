@@ -18,17 +18,13 @@ class ParkingController extends Controller
         $input = Request::all();
         $lat_index = floor($input['lat']/0.0017966);
         $lng_index = floor($input['lng']/0.0017966);
-        $input = [    
-            'lat_index' => $lat_index,
-            'lng_index' => $lng_index,        
-            'lat' => $input['lat'],
-            'lng' => $input['lng'],
-            'street_number' => $input['street_number'],
-            'route' => $input['route'],
-            'administrative_area_level_3' => $input['administrative_area_level_3'],
-            'administrative_area_level_2' => $input['administrative_area_level_2'],
-            'administrative_area_level_1' => $input['administrative_area_level_1'] 
-        ];
+
+        $input = Parking::reverseGeoLocation($input);
+
+        $input['lat_index'] = $lat_index;
+        $input['lng_index'] = $lng_index;        
+
+        
 
         // Contiene la respuesta final
         $finalResponse = [];
