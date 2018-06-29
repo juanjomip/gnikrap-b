@@ -251,6 +251,7 @@ class Parking extends Model
             $parking['lng'] = $input['lng'];
             $parking['lat_index'] = $lat_index;
             $parking['lng_index'] = $lng_index;
+            
             return $parking;
 
             
