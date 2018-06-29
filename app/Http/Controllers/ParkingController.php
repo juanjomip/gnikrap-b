@@ -54,6 +54,10 @@ class ParkingController extends Controller
             $finalResponse['best_choice_by_position'] = NULL;              
         }
 
+        foreach ($finalResponse['parkings'] as &$parking) {
+            $parking->price = round(rand(20,40), 0);
+        }
+
         $finalResponse['input'] = $input;
         return $finalResponse;       
     }
