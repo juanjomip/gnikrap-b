@@ -38,7 +38,7 @@ class ParkingController extends Controller
         } else {
             $finalResponse['parkings'] = [];
             $finalResponse['best_choice_by_name'] = NULL;
-            $finalResponse['status'] == 'EMPTY_RESULTS';    
+            $finalResponse['status'] = 'EMPTY_RESULTS';    
         }
 
         // Obtiene los estacionamientos y la mejor opción por posición.
@@ -54,6 +54,7 @@ class ParkingController extends Controller
             $finalResponse['best_choice_by_position'] = NULL;              
         }
 
+        $finalResponse['input'] = $input;
         return $finalResponse;       
     }
 
